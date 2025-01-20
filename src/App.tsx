@@ -25,18 +25,40 @@ const App: React.FC = () => {
     }
   };
 
+  const handlePrev = () => {
+    if (currentTrack) {
+      const currentIndex = tracks.findIndex(track => track.id === currentTrack.id);
+      const prevIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+      setCurrentTrack(tracks[prevIndex]);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentTrack) {
+      const currentIndex = tracks.findIndex(track => track.id === currentTrack.id);
+      const nextIndex = (currentIndex + 1) % tracks.length;
+      setCurrentTrack(tracks[nextIndex]);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-2xl font-bold mb-4">MP3 Player</h1>
+    <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
+      <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-xs">
+        <h1 className="text-2xl font-bold mb-4 text-center">MP3 Player</h1>
         <input
           type="file"
           accept="audio/*"
           multiple
           onChange={handleFileUpload}
-          className="mb-4 p-2 w-full bg-gray-800 rounded"
+          className="mb-4 p-2 w-full bg-gray-700 rounded"
         />
-        {currentTrack && <AudioPlayer track={currentTrack} />}
+        {currentTrack && (
+          <AudioPlayer 
+            track={currentTrack} 
+            onPrev={handlePrev} 
+            onNext={handleNext} 
+          />
+        )}
         <Playlist 
           tracks={tracks} 
           currentTrack={currentTrack} 
@@ -46,5 +68,6 @@ const App: React.FC = () => {
     </div>
   );
 };
+
 
 export default App;
