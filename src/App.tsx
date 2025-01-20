@@ -43,7 +43,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center p-4">
-      <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-xs">
+      <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-xs md:max-w-md lg:max-w-lg">
         <h1 className="text-2xl font-bold mb-4 text-center">MP3 Player</h1>
         <input
           type="file"
@@ -68,6 +68,5 @@ const App: React.FC = () => {
     </div>
   );
 };
-
 
 export default App;
