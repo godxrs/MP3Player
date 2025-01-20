@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AudioPlayer from './components/AudioPlayer';
 import Playlist from './components/Playlist';
 
@@ -11,6 +11,38 @@ interface AudioTrack {
 const App: React.FC = () => {
   const [tracks, setTracks] = useState<AudioTrack[]>([]);
   const [currentTrack, setCurrentTrack] = useState<AudioTrack | null>(null);
+
+  useEffect(() => {
+    // Load tracks and current track from local storage on component mount
+    const storedTracks = localStorage.getItem('tracks');
+    const storedCurrentTrackId = localStorage.getItem('currentTrackId');
+    
+    if (storedTracks) {
+      const parsedTracks: AudioTrack[] = JSON.parse(storedTracks);
+      setTracks(parsedTracks);
+      
+      if (storedCurrentTrackId) {
+        const savedTrack = parsedTracks.find(track => track.id === storedCurrentTrackId);
+        if (savedTrack) {
+          setCurrentTrack(savedTrack);
+        }
+      } else if (parsedTracks.length > 0) {
+        setCurrentTrack(parsedTracks[0]);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save tracks to local storage whenever it changes
+    localStorage.setItem('tracks', JSON.stringify(tracks));
+  }, [tracks]);
+
+  useEffect(() => {
+    // Save current track ID to local storage whenever it changes
+    if (currentTrack) {
+      localStorage.setItem('currentTrackId', currentTrack.id);
+    }
+  }, [currentTrack]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
