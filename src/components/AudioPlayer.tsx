@@ -17,6 +17,7 @@ const AudioPlayer: React.FC<Props> = ({ track, onPrev, onNext }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -45,6 +46,14 @@ const AudioPlayer: React.FC<Props> = ({ track, onPrev, onNext }) => {
       setIsPlaying(!isPlaying);
     }
   };
+
+  const handleVolumeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(event.target.value);
+    setVolume(newVolume);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+    }
+  }
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -81,8 +90,21 @@ const AudioPlayer: React.FC<Props> = ({ track, onPrev, onNext }) => {
         </div>
         <span>{formatTime(duration)}</span>
       </div>
+      <div className="flex items-center justify-between mb-4">
+        <span>Volume</span>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={volume}
+          onChange={handleVolumeChange}
+          className="w-full mx-2"
+        />
+      </div>
     </div>
   );
 };
+
 
 export default AudioPlayer;
